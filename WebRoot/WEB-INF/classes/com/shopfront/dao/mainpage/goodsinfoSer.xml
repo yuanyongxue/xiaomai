@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopfront.dao.mainpage.goodsinfoSer">
+
+	 <!-- cart页面 -->
+		<select id="list2" resultType="Shopcart">
+		<!-- select * from tb_goodsinfo
+		select a.GoodsName,a.GoodsIntroduce,a.GoodsUrl,a.MarketPrice,b.Num  from `tb_goodsinfo` a ,`tb_ shopcart` b  where a.GoodsID=b.CartID
+		select a.*,b.Num from tb_goodsinfo a INNER JOIN `tb_ shopcart` b  where a.GoodsID=b.CartID -->
+		
+		select a.shopcartID,a.GoodsinfoPrice,a.Goodsinfosum,a.GoodsinfoName,b.ImageUrl from `tb_shopcart` a  INNER JOIN tb_image b where  a.shopcartID =b.ImageID
+		</select>
+		
+		
+		<!-- <resultmap type="Shopcart" id="map1">
+			<result column="Num" property="Num"></result>
+			<result column="GoodsinfoName" property="GoodsinfoName"></result>
+			<result column="GoodsinfoPrice" property="GoodsinfoPrice"></result>
+		</resultmap>
+			<association property="Image" javaType="Image">
+					<result column="ImageUrl" property="ImageUrl"/>
+			</association>
+		<select id="list2" resultType="map1">
+			select a.shopcartID,a.GoodsinfoPrice,a.Goodsinfosum,a.GoodsinfoName,b.ImageUrl from `tb_shopcart` a  INNER JOIN tb_image b where  a.shopcartID =b.ImageID
+		</select>
+		 -->
+		
+		<!-- private int Num;//购买数量
+		private String GoodsinfoName;//商品名称
+		private String GoodsinfoPrice;//商品价格 -->
+		
+		<!-- <resultMap type="Shopcart" id="map2">
+	      <result column="Num" property="Num"/>
+	      <result column="GoodsinfoName" property="GoodsinfoName"/>
+	      <result column="GoodsinfoPrice" property="GoodsinfoPrice"/>
+		      <association property="entity" javaType="com.shopfront.entity.Image">
+		          <result column="ImageUrl" property="ImageUrl" />
+		      </association>
+	   </resultMap>
+	  	<select id="list2" resultMap="map2">
+	    	 select a.*,b.ImageUrl from `tb_shopcart` a  INNER JOIN tb_image b where  a.shopcartID =b.ImageID
+	  	</select> -->
+		<!-- cart删除-->
+		<delete id="del">
+			delete from tb_shopcart where shopcartID=#{shopcartID}
+		</delete>
+	  	
+	  	
+	  	<!-- 结算 -->
+	  	<select id="list4"  resultType="Shopcart">
+			select SUM(Goodsinfosum) from tb_shopcart		
+		</select>
+	
+	
+	
+	
+
+
+
+
+
+		<!-- 模糊查询	 -->	
+		<select id="list3"  resultType="com.shopfront.entity.Goodsinfo">
+					select * from  tb_goodsinfo where GoodsName like #{s}	
+		</select>
+	
+		
+		<!-- 主页  -->
+		<select id="list" resultType="com.shopfront.entity.Goodsinfo">
+			select * from tb_goodsinfo where ClassID2=(SELECT ClassID FROM tb_filtrate 
+where (SELECT count(ID) FROM tb_filtrate where MemberID = #{MemberID} GROUP BY MemberID)>0 
+AND MemberID = #{MemberID}
+order BY ID DESC LIMIT 1) limit 1,4
+			
+		</select>
+		<select id="list1" resultType="com.shopfront.entity.Goodsinfo">
+			select * from tb_goodsinfo limit 4
+		</select>
+		
+		
+		
+		
+		
+		<!-- <select id="list2" resultMap="com.shopfront.entity.Goodsinfo">
+			select * from tb_goodsinfo where GoodsName like #{name}
+		</select> -->
+		
+		
+</mapper>
